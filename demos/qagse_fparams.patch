@@ -1,0 +1,86 @@
+--- qagse_fparams.c.orig	2016-10-26 19:39:32.480587085 -0500
++++ qagse_fparams.c	2016-10-26 21:48:15.127881392 -0500
+@@ -10,7 +10,7 @@
+ 		http://www.netlib.org/f2c/libf2c.zip
+ */
+ 
+-#include "f2c.h"
++//#include "f2c.h"
+ 
+ /* Table of constant values */
+ 
+@@ -48,7 +48,7 @@
+     logical noext;
+     extern /* Subroutine */ int qpsrt_(integer *, integer *, integer *, real *
+ 	    , real *, integer *, integer *);
+-    extern doublereal r1mach_(integer *);
++    extern doublereal r1mach_(const __constant integer *);
+     integer iroff1, iroff2, iroff3;
+     real res3la[3], error1, error2, rlist2[52];
+     integer numrl2;
+@@ -319,7 +319,7 @@
+     if (*limit == 1) {
+ 	*ier = 1;
+     }
+-    if (*ier != 0 || *abserr <= errbnd && *abserr != resabs || *abserr == 0.f)
++    if (*ier != 0 || (*abserr <= errbnd && *abserr != resabs) || *abserr == 0.f)
+ 	     {
+ 	goto L140;
+     }
+@@ -640,7 +640,7 @@
+     real err1, err2, err3, tol1, tol2, tol3;
+     integer indx;
+     real e1abs, oflow, error, delta1, delta2, delta3;
+-    extern doublereal r1mach_(integer *);
++    extern doublereal r1mach_(const __constant integer *);
+     real epmach, epsinf;
+     integer newelm, limexp;
+ 
+@@ -868,28 +868,30 @@
+     return 0;
+ } /* qelg_ */
+ 
+-/* Subroutine */ int qk21_(E_fp f, real *fp1, real *fp2, real *a, real *b, 
+-	real *result, real *abserr, real *resabs, real *resasc)
+-{
+-    /* Initialized data */
+ 
+-    static real xgk[11] = { .9956571630258081f,.9739065285171717f,
++    const __constant real xgk[11] = { .9956571630258081f,.9739065285171717f,
+ 	    .9301574913557082f,.8650633666889845f,.7808177265864169f,
+ 	    .6794095682990244f,.5627571346686047f,.4333953941292472f,
+ 	    .2943928627014602f,.1488743389816312f,0.f };
+-    static real wgk[11] = { .01169463886737187f,.03255816230796473f,
++    const __constant real wgk[11] = { .01169463886737187f,.03255816230796473f,
+ 	    .054755896574352f,.07503967481091995f,.09312545458369761f,
+ 	    .1093871588022976f,.1234919762620659f,.1347092173114733f,
+ 	    .1427759385770601f,.1477391049013385f,.1494455540029169f };
+-    static real wg[5] = { .06667134430868814f,.1494513491505806f,
++    const __constant real wg[5] = { .06667134430868814f,.1494513491505806f,
+ 	    .219086362515982f,.2692667193099964f,.2955242247147529f };
+ 
++
++/* Subroutine */ int qk21_(E_fp f, real *fp1, real *fp2, real *a, real *b, 
++	real *result, real *abserr, real *resabs, real *resasc)
++{
++    /* Initialized data */
++
+     /* System generated locals */
+     real r__1, r__2;
+     doublereal d__1;
+ 
+     /* Builtin functions */
+-    double pow_dd(doublereal *, doublereal *);
++    doublereal pow_dd(doublereal *, const __constant doublereal *);
+ 
+     /* Local variables */
+     integer j;
+@@ -900,7 +902,7 @@
+     real hlgth, centr, reskh;
+     extern doublereal funct_(real *, real *, real *);
+     real uflow;
+-    extern doublereal r1mach_(integer *);
++    extern doublereal r1mach_(const __constant integer *);
+     real epmach, dhlgth;
+ 
+ /* ***begin prologue  qk21 */
