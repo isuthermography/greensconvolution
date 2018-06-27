@@ -85,6 +85,15 @@ included copy should be fine):
 Greensinversion is a package for model-based inversion of
 flash thermography measurement data.
 
+
+ACKNOWLEDGMENTS
+
+If using or building on this software please cite the authors!
+S.D. Holland and B. Schiefelbein, Model-based inversion for pulse thermography, J. Exp. Mech (under review, 2018)
+
+This material is based own work supported by NASA through Early
+Stage Innovation grant #NNX15AD75G.
+
 Copyright (C) 2015-2018 Iowa State University Research Foundation, Inc.
 
 Redistribution and use in source and binary forms, with or without
