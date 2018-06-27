@@ -25,7 +25,7 @@ static inline float deceleration(float theta,float x,float depth)
   if (depth < fabs(x)*fabs(theta/2.0f + pow(theta,3.0f)/24.0f)) {        
     return pow(1.0f/(1.0f+(1.0f/12.0f)*pow(theta,2.0f)),-2.0f * (1.0f - depth/(fabs(x)*fabs(theta/2.0f + pow(theta,3.0f)/24.0f))));
   }
-  return 1.0;
+  return 1.0f;
 }
 
 // inner_sin_sq from convex analysis
@@ -68,11 +68,11 @@ __kernel void greensfcn_curved_opencl(
   uint64_t sumcnt,sumpos,loopdone=FALSE;
   uint64_t axiscnt2,axispos;
 
-  float sum=0.0;
+  float sum=0.0f;
   float Predicted_T;
   float ExtraVolumeFactor,LengthFactor;
   float alphaz,alphax,alphay;
-  float iop_dparallel=0.0,iop_dcross=0.0;
+  float iop_dparallel=0.0f,iop_dcross=0.0f;
 
   //iop_dx=(void*)0;
   //iop_dy=(void*)0;
@@ -234,7 +234,7 @@ __kernel void greensfcn_curved_opencl(
     // This is extended to 3D, including effect of cross-curvature
     // (that is presumed to affect the ExtraVolumeFactor but
     // nothing else)
-    if (iop_dx && (iop_dx[iop_dx_pos] != 0.0 || iop_dy[iop_dy_pos] != 0.0)) {
+    if (iop_dx && (iop_dx[iop_dx_pos] != 0.0f || iop_dy[iop_dy_pos] != 0.0f)) {
       /* integrate-over-pixel mode */
       
 
@@ -248,36 +248,36 @@ __kernel void greensfcn_curved_opencl(
     } //else {
       //Predicted_T = source_intensity[source_intensitypos]*(2.0/(rho*cp*pow((float)(4.0f*M_PI),(float)3.0f/2.0f)*sqrt(alphaz)*alphax*alphay*pow(tvec[tpos],(float)(3.0f/2.0f))))*exp(-pow(depth[depthpos],2.0f)/(4.0f*alphaz*tvec[tpos]));
     //}
-    Predicted_T = source_intensity[source_intensitypos]*(2.0/((rho*cp)*pow(4.0f*((float)M_PI)*alphaz*tvec[tpos],0.5f)))*exp(-pow(depth[depthpos],2.0f)/(4.0f*alphaz*tvec[tpos]));
+    Predicted_T = source_intensity[source_intensitypos]*(2.0f/((rho*cp)*pow(4.0f*((float)M_PI)*alphaz*tvec[tpos],0.5f)))*exp(-pow(depth[depthpos],2.0f)/(4.0f*alphaz*tvec[tpos]));
 
 
     ExtraVolumeFactor = (0.25f)*(avgcurvatures[avgcurvaturespos]+avgcrosscurvatures[avgcrosscurvaturespos])*sqrt(((float)M_PI)*alphaz*tvec[tpos]);
     // ExtraVolumeFactor of 1.0 would halve Predicted_T (see heatsim2/curved_laminate_combined_surfcorr_2d.py for details)
-    if (ExtraVolumeFactor > 1.0) {
-      ExtraVolumeFactor=1.0;
+    if (ExtraVolumeFactor > 1.0f) {
+      ExtraVolumeFactor=1.0f;
     } 
     // ... Opposite limiting case: 
-    if (ExtraVolumeFactor < -0.6) {
-      ExtraVolumeFactor=-0.6;
+    if (ExtraVolumeFactor < -0.6f) {
+      ExtraVolumeFactor=-0.6f;
     }
     
     Predicted_T = Predicted_T/(1.0f + ExtraVolumeFactor);
 
     // Consider heat flow along the line 
-    if (avgcurvatures[avgcurvaturespos] >= 0.0) {
+    if (avgcurvatures[avgcurvaturespos] >= 0.0f) {
       /* concave case */
-      if ((iop_dx && (iop_dx[iop_dx_pos] != 0.0 || iop_dy[iop_dy_pos] != 0.0)) && iop_dparallel > 0.2*sqrt(4.0f*alpha_parallel*tvec[tpos]) && iop_dparallel > 0.2*linelength[linelengthpos]) {
+      if ((iop_dx && (iop_dx[iop_dx_pos] != 0.0f || iop_dy[iop_dy_pos] != 0.0f)) && iop_dparallel > 0.2f*sqrt(4.0f*alpha_parallel*tvec[tpos]) && iop_dparallel > 0.2f*linelength[linelengthpos]) {
 	// step size is large relative to length... use integrate_over_pixel method 
-	Predicted_T *= (erf(((linelength[linelengthpos]+iop_dparallel/2.0f)/sqrt(4.0f*alpha_parallel*tvec[tpos]))*sqrt(1.0f + depth[depthpos]*avgcurvatures[avgcurvaturespos])*sqrt(deceleration(linelength[linelengthpos]*avgcurvatures[avgcurvaturespos],linelength[linelengthpos],depth[depthpos]))) - erf(((linelength[linelengthpos]-iop_dparallel/2.0f)/sqrt(4.0f*alpha_parallel*tvec[tpos]))*sqrt(1.0f + depth[depthpos]*avgcurvatures[avgcurvaturespos])*sqrt(deceleration(linelength[linelengthpos]*avgcurvatures[avgcurvaturespos],linelength[linelengthpos],depth[depthpos]))))/(2.0*iop_dparallel);
+	Predicted_T *= (erf(((linelength[linelengthpos]+iop_dparallel/2.0f)/sqrt(4.0f*alpha_parallel*tvec[tpos]))*sqrt(1.0f + depth[depthpos]*avgcurvatures[avgcurvaturespos])*sqrt(deceleration(linelength[linelengthpos]*avgcurvatures[avgcurvaturespos],linelength[linelengthpos],depth[depthpos]))) - erf(((linelength[linelengthpos]-iop_dparallel/2.0f)/sqrt(4.0f*alpha_parallel*tvec[tpos]))*sqrt(1.0f + depth[depthpos]*avgcurvatures[avgcurvaturespos])*sqrt(deceleration(linelength[linelengthpos]*avgcurvatures[avgcurvaturespos],linelength[linelengthpos],depth[depthpos]))))/(2.0f*iop_dparallel);
       } else {
 	Predicted_T *= exp(-(pow(linelength[linelengthpos],2.0f)/(4.0f*alpha_parallel*tvec[tpos]))*(1.0f + depth[depthpos]*avgcurvatures[avgcurvaturespos])*deceleration(linelength[linelengthpos]*avgcurvatures[avgcurvaturespos],linelength[linelengthpos],depth[depthpos]))/sqrt(4.0f*((float)M_PI)*alpha_parallel*tvec[tpos]);
       } 
     } else {
       /* convex case */
-      if ((iop_dx && (iop_dx[iop_dx_pos] != 0.0 || iop_dy[iop_dy_pos] != 0.0)) && iop_dparallel > 0.2*sqrt(4.0f*alpha_parallel*tvec[tpos]) && iop_dparallel > 0.2*linelength[linelengthpos]) {
+      if ((iop_dx && (iop_dx[iop_dx_pos] != 0.0f || iop_dy[iop_dy_pos] != 0.0f)) && iop_dparallel > 0.2f*sqrt(4.0f*alpha_parallel*tvec[tpos]) && iop_dparallel > 0.2f*linelength[linelengthpos]) {
 	// step size is large relative to length... use integrate_over_pixel method.... don't use the inner_sin_sq term because 
 	// it is hard to integrate... Use the perturbation approach instead. this is only for very short time, when the perturbation approach is pretty good...
-	Predicted_T *= (erf(((linelength[linelengthpos]+iop_dparallel/2.0f)/sqrt(4.0f*alpha_parallel*tvec[tpos]))*sqrt(1.0f + depth[depthpos]*avgcurvatures[avgcurvaturespos])) - erf(((linelength[linelengthpos]-iop_dparallel/2.0f)/sqrt(4.0f*alpha_parallel*tvec[tpos]))*sqrt(1.0f + depth[depthpos]*avgcurvatures[avgcurvaturespos])))/(2.0*iop_dparallel);
+	Predicted_T *= (erf(((linelength[linelengthpos]+iop_dparallel/2.0f)/sqrt(4.0f*alpha_parallel*tvec[tpos]))*sqrt(1.0f + depth[depthpos]*avgcurvatures[avgcurvaturespos])) - erf(((linelength[linelengthpos]-iop_dparallel/2.0f)/sqrt(4.0f*alpha_parallel*tvec[tpos]))*sqrt(1.0f + depth[depthpos]*avgcurvatures[avgcurvaturespos])))/(2.0f*iop_dparallel);
       } else {
 	Predicted_T *= exp(-(pow((1.0f/fabs(avgcurvatures[avgcurvaturespos]))-depth[depthpos],2.0f)/(4.0f*alpha_parallel*tvec[tpos]))*(1.0f + depth[depthpos]/((1.0f/fabs(avgcurvatures[avgcurvaturespos]))-depth[depthpos]))*4.0f*inner_sin_sq(0.5f*linelength[linelengthpos]*avgcurvatures[avgcurvaturespos]))/sqrt(4.0f*((float)M_PI)*alpha_parallel*tvec[tpos]);
       }
@@ -285,7 +285,7 @@ __kernel void greensfcn_curved_opencl(
     }
     
     // Consider heat flow across the line... here distance=0 so main factor would be exp(-0^2/(4alphat))
-    if ((iop_dx && (iop_dx[iop_dx_pos] != 0.0 || iop_dy[iop_dy_pos] != 0.0)) && iop_dparallel > 0.2*sqrt(4.0f*alpha_parallel*tvec[tpos])) {
+    if ((iop_dx && (iop_dx[iop_dx_pos] != 0.0f || iop_dy[iop_dy_pos] != 0.0f)) && iop_dparallel > 0.2f*sqrt(4.0f*alpha_parallel*tvec[tpos])) {
       /* integrate_over_pixel method */
       Predicted_T *= erf(iop_dcross/(2.0f*sqrt(4.0f*alpha_cross*tvec[tpos])))/iop_dcross;
     } else {

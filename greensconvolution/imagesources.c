@@ -36,7 +36,7 @@ __kernel void imagesources_opencl(__global const float *rconductivityscaledvec, 
   
   uint64_t resultpos;
   uint64_t tposbase,rposbase;
-  float sum=0.0,thiscoeff,expcoeff;
+  float sum=0.0f,thiscoeff,expcoeff;
   int64_t axiscnt2,axispos;
   float r2pos;
 
@@ -70,14 +70,14 @@ __kernel void imagesources_opencl(__global const float *rconductivityscaledvec, 
   /* Loop over images (z positions)  */
 
   /* leading coefficient */  
-  thiscoeff=coeff/pow(tvec[tposbase],(float)(3.0/2.0));
-  expcoeff=4.0*alphaz;
+  thiscoeff=coeff/pow(tvec[tposbase],(float)(3.0f/2.0f));
+  expcoeff=4.0f*alphaz;
 
 
   for (imagenum=0;imagenum < nimages;imagenum++) {
     //barrier(CLK_LOCAL_MEM_FENCE);
     
-    r2pos=pow(rconductivityscaledvec[rposbase],(float)2.0) + pow(image_source_zposns[imagenum],(float)2.0);
+    r2pos=pow(rconductivityscaledvec[rposbase],(float)2.0f) + pow(image_source_zposns[imagenum],(float)2.0f);
 
     sum+=exp(-r2pos/(expcoeff*tvec[tposbase]));
     

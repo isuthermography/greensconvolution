@@ -37,7 +37,7 @@ __kernel void imagesources_curved_opencl(__global const float *rconductivityscal
   
   uint64_t resultpos;
   uint64_t tposbase,rposbase,avgcurvaturesposbase;
-  float sum=0.0,thiscoeff,curvature,Predicted_T,Exponent;
+  float sum=0.0f,thiscoeff,curvature,Predicted_T,Exponent;
   int64_t axiscnt2,axispos;
   float r2pos;
 
@@ -192,13 +192,13 @@ __kernel void imagesources_curved_opencl(__global const float *rconductivityscal
   //}
 
   
-  float ExtraVolumeFactor=0.25*avgcurvatures[avgcurvaturesposbase]*sqrt(M_PI*alphaz*tvec[tposbase]);
+  float ExtraVolumeFactor=0.25f*avgcurvatures[avgcurvaturesposbase]*sqrt(M_PI*alphaz*tvec[tposbase]);
   // Bounds on ExtraVolumeFactor
-  if (ExtraVolumeFactor > 1.0) {
-    ExtraVolumeFactor=1.0;
+  if (ExtraVolumeFactor > 1.0f) {
+    ExtraVolumeFactor=1.0f;
   }
-  if (ExtraVolumeFactor < -0.6) {
-    ExtraVolumeFactor=-0.6;
+  if (ExtraVolumeFactor < -0.6f) {
+    ExtraVolumeFactor=-0.6f;
   }
   
 
@@ -209,7 +209,7 @@ __kernel void imagesources_curved_opencl(__global const float *rconductivityscal
     //barrier(CLK_LOCAL_MEM_FENCE);
     
     
-    Predicted_T = thiscoeff/(1.0+ExtraVolumeFactor); // last factor from above loop
+    Predicted_T = thiscoeff/(1.0f+ExtraVolumeFactor); // last factor from above loop
     //printf("WithEVF: %f\n",Predicted_T);
     // Next factor: np.exp(-source_depth**2.0/(4.0*alphaz*Pred_t))
     // (put into Exponent) 

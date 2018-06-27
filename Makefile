@@ -9,5 +9,6 @@ clean:
 	rm -f *.pyc *~ */*~ */*.pyc *.aux *.log *.pdf greensconvolution/*~
 
 commit: clean
-	hg addrem
-	hg commit
+	git add -A # hg addrem
+	git commit -a # hg commit
+

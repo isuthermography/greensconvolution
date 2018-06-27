@@ -6,11 +6,8 @@
 import re
 import numpy as np
 import scipy as sp
-import matplotlib
-import pylab as pl
 import scipy.integrate
 from scipy.integrate import quad
-from mpl_toolkits.mplot3d import Axes3D
 from netCDF4 import Dataset
 import os
 import os.path
@@ -294,6 +291,10 @@ integral_dintegranddc_new=np.vectorize(lambda v,c: quad(lambda w: dnewintegrandd
 # ***!!! BUG now fixed with "new" above
 
 if __name__=="__main__":
+    import matplotlib
+    import pylab as pl
+    from mpl_toolkits.mplot3d import Axes3D
+    
     # When run from the command line, generate /tmp/greensconvolution.nc
 
     # max value at v=.794,c=(0.1 or less)

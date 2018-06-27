@@ -73,11 +73,11 @@ def greensconvolution_crosscheck(greensconvolution_params,z,x,t,y,k,rho,cp):
     res=coeff*greensconvolution.greensconvolution_calc.evalfromneighbors(vrange,crange,integraleval,integral_dintegranddveval,integral_dintegranddceval,v,c,verbose=True)
 
     # now evaluate with greensconvolution_integrate
-    z=np.array((z,),dtype='d')
-    x=np.array((x,),dtype='d')
-    t=np.array((t,),dtype='d')
+    z=np.array((z,),dtype='f')
+    x=np.array((x,),dtype='f')
+    t=np.array((t,),dtype='f')
 
-    res2=greensconvolution_integrate(greensconvolution_params,z,x,t,y,k,rho,cp)
+    res2=greensconvolution_integrate(greensconvolution_params,z,x,t,y,k,rho,cp,1.0,())
 
     print("greensconvolution_crosscheck: %f vs. %f" % (res,res2))
 

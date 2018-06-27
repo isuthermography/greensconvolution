@@ -183,7 +183,7 @@ static inline void greensconvolution_integrate_anisotropic_c_one(uint64_t itercn
 {
   uint64_t zpos,tpos,xpos,curvaturepos,resultpos,sumcnt,sumpos;
   uint64_t zposbase,tposbase,xposbase,curvatureposbase;
-  float sum=0.0;
+  float sum=0.0f;
   int loopdone=FALSE;
 
   float vval,cval;
@@ -291,17 +291,17 @@ static inline void greensconvolution_integrate_anisotropic_c_one(uint64_t itercn
       cval=fabs(sqrt(pow(xvec[xpos],2.0f)*(alphaz/alphaxy) + pow(yval,2.0f)*(alphaz/alphaxy) + pow(zvec[zpos],2.0f))/zvec[zpos]);
       //cval=fabs(rconductivityscaledvec[xpos]/zvec[zpos]);
 
-      curvcoeff = 1.0;
+      curvcoeff = 1.0f;
       
     } else {
       // curved case:
       float w_root_v = (curvaturevec[curvaturepos]*zvec[zpos]*sqrt(M_PI)/8.0f)*sqrt(vval);
       // bounds on w_root_v (empirical)
-      if (w_root_v < -0.6) {
-	w_root_v = -0.6;
+      if (w_root_v < -0.6f) {
+	w_root_v = -0.6f;
       }
-      if (w_root_v > 1.0) {
-	w_root_v = 1.0;
+      if (w_root_v > 1.0f) {
+	w_root_v = 1.0f;
       }
       
       curvcoeff = (1.0f/(1.0f + 0.8f*w_root_v));
@@ -313,8 +313,8 @@ static inline void greensconvolution_integrate_anisotropic_c_one(uint64_t itercn
 	  theta=M_PI/2.0f;
 	}
 	float deceleration = pow(1.0f+(1.0f/12.0f)*pow(theta,2.0f),2.0f*(1.0f - xvec[xpos]/(fabs(xvec[xpos])*fabs(theta/2.0f + pow(theta,3.0f)/24.0f))));
-	if (deceleration < 1.0) {
-	  deceleration = 1.0;
+	if (deceleration < 1.0f) {
+	  deceleration = 1.0f;
 	}
 
 	// Value for cedilla
