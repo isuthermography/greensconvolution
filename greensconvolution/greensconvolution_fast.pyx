@@ -1179,7 +1179,7 @@ def greensconvolution_integrate_anisotropic(greensconvolution_params,zvecinput,x
             pass
         pass
     
-    if np.prod(shape)*sizeof(float) + np.prod(zvecshape)*sizeof(float) + np.prod(tvecshape)*sizeof(float) + np.prod(xvecshape)*sizeof(float) > 0.8*max_alloc_size  and Onboard_Summation_OK:
+    if kernel.startswith("opencl_") and np.prod(shape)*sizeof(float) + np.prod(zvecshape)*sizeof(float) + np.prod(tvecshape)*sizeof(float) + np.prod(xvecshape)*sizeof(float) > 0.8*max_alloc_size  and Onboard_Summation_OK:
         print("greensconvolution: Performing onboard summation on GPU to avoid exceeding GPU memory")
         
         CSumAxes=sumaxes 
