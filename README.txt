@@ -91,7 +91,7 @@ ACKNOWLEDGMENTS
 If using or building on this software please cite the authors!
 S.D. Holland and B. Schiefelbein, Model-based inversion for pulse thermography, J. Exp. Mech (under review, 2018)
 
-This material is based own work supported by NASA through Early
+This material is based on work supported by NASA through Early
 Stage Innovation grant #NNX15AD75G.
 
 Copyright (C) 2015-2018 Iowa State University Research Foundation, Inc.

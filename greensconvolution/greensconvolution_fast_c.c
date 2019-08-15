@@ -294,7 +294,7 @@ static inline void greensconvolution_integrate_anisotropic_c_one(uint64_t itercn
       curvcoeff = 1.0f;
       
     } else {
-      // curved case:
+      // curved case: see bottom of greenfcn_doc.pdf for definition of w_root_v
       float w_root_v = (curvaturevec[curvaturepos]*zvec[zpos]*sqrt(M_PI)/8.0f)*sqrt(vval);
       // bounds on w_root_v (empirical)
       if (w_root_v < -0.6f) {
