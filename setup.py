@@ -82,6 +82,9 @@ setup(name="greensconvolution",
       url="http://thermal.cnde.iastate.edu",
       ext_modules=ext_modules,
       packages=["greensconvolution"],
+      cmdclass = {
+          "build_ext": build_ext_compile_args,
+      },
       package_data={ "greensconvolution":
                      [ "greensconvolution.nc","greensconvolution_fast_c.c","opencl_interpolator_prefix.c","simplegaussquad.c","quadpack_prefix.c","qagse_fparams.c","quadpack.c","imagesources.c","imagesources_curved.c","greensfcn_curved.c" ]  # Note: greensconvolution.nc file can be regenerated in /tmp by running greensconvolution/greensconvolution_calc.py as a script -- preferably in ipython
                  })
