@@ -462,7 +462,7 @@ void greensconvolution_integrate_anisotropic_c(
   // NOTE: This is supposed to be the same code as in greensconvolution_fast.pyx/greensconvolution_integrate_anisotropic_py
   float log10v0,log10c0,dlog10v,dlog10c;
   uint64_t iterlen;
-  uint64_t itercnt;
+  int64_t itercnt;
   uint64_t axiscnt;
 
   iterlen=1;
@@ -484,7 +484,7 @@ void greensconvolution_integrate_anisotropic_c(
 
 
 #ifdef USE_OPENMP
-#pragma omp parallel for shared(tvec,zvec,xvec,result,vrange,crange,integraleval,integral_dintegranddveval,integral_dintegranddceval,stderr,alphaz,alphaxy,curvature_flag,log10v0,log10c0,dlog10v,dlog10c,nvrange,ncrange,coeff,ndim,resultstrides,tvecshape,xvecshape,zvecshape,tvecstrides,xvecstrides,zvecstrides,yval,curvaturevec,curvaturevecshape,curvaturevecstrides,sumstrides,shape,iterlen,axissumflag) default(none) private(itercnt)
+#pragma omp parallel for shared(tvec,zvec,xvec,result,vrange,crange,integraleval,integral_dintegranddveval,integral_dintegranddceval,alphaz,alphaxy,curvature_flag,log10v0,log10c0,dlog10v,dlog10c,nvrange,ncrange,coeff,ndim,resultstrides,tvecshape,xvecshape,zvecshape,tvecstrides,xvecstrides,zvecstrides,yval,curvaturevec,curvaturevecshape,curvaturevecstrides,sumstrides,shape,iterlen,axissumflag) default(none) private(itercnt)
 #endif /* USE_OPENMP */
   for (itercnt=0; itercnt < iterlen; itercnt++) {
     greensconvolution_integrate_anisotropic_c_one(itercnt,
