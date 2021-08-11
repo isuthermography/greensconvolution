@@ -13,11 +13,15 @@
 
 #define USE_OPENMP
 
+define GLOBAL_NULL NULL
+
 #else /* __OPENCL_VERSION__ */
 
 #ifndef NULL
 #define NULL ((void *)0L)
 #endif
+
+#define GLOBAL_NULL ((__global void *)0L)
 
 #define CONSTGLOBAL __constant
 #define OPENCL_GLOBAL __global
@@ -558,7 +562,7 @@ void greensconvolution_integrate_anisotropic_c_opencl(OPENCL_GLOBAL const float 
 						xvec, xvecshape,xvecstrides,
 						tvec, tvecshape,tvecstrides,
 						yval,
-						NULL,NULL,NULL,
+						GLOBAL_NULL,GLOBAL_NULL,GLOBAL_NULL,
 						sumstrides, shape,
 						
 						result,resultstrides,
