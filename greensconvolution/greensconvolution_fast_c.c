@@ -13,7 +13,7 @@
 
 #define USE_OPENMP
 
-define GLOBAL_NULL NULL
+#define GLOBAL_NULL NULL
 
 #else /* __OPENCL_VERSION__ */
 
