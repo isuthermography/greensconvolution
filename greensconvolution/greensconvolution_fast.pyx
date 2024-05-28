@@ -671,7 +671,7 @@ def greensconvolution_image_sources(greensconvolution_params,rconductivityscaled
     
     resultref=returnparam(result)  # python (not cython) reference that we can access from closure
     returnshape=returnparam(shape) #returnparam(shape)
-    PySummedShape=shape[(~PyAxisSumFlag.astype(np.bool))]
+    PySummedShape=shape[(~PyAxisSumFlag.astype(bool))]
 
     # Closure function is what we have to do to clean up. and get data
     def closure():
@@ -825,13 +825,13 @@ def greensconvolution_greensfcn_curved(greensconvolution_params,source_intensity
     
     
     resultshape=np.array(shape,dtype=np.int64)  
-    resultshape[axissumflag.astype(np.bool)]=1
+    resultshape[axissumflag.astype(bool)]=1
     resultstrides = np.array(np.cumprod(np.concatenate((resultshape,(1,)))[-1:0:-1])[::-1],dtype=np.int64)
 
-    resultsummedshape=resultshape[(~axissumflag.astype(np.bool))]
+    resultsummedshape=resultshape[(~axissumflag.astype(bool))]
 
     sumshape=np.array(shape,dtype=np.int64)  
-    sumshape[~axissumflag.astype(np.bool)]=1
+    sumshape[~axissumflag.astype(bool)]=1
     sumstrides=np.array(np.cumprod(np.concatenate((sumshape,(1,)))[-1:0:-1])[::-1],dtype=np.int64)
 
 
@@ -1207,12 +1207,12 @@ def greensconvolution_integrate_anisotropic(greensconvolution_params,zvecinput,x
 
 
     sumshape = np.array(shape,dtype=np.int64)
-    sumshape[~axissumflag.astype(np.bool)]=1
+    sumshape[~axissumflag.astype(bool)]=1
     sumstrides=np.array(np.cumprod(np.concatenate((sumshape,(1,)))[-1:0:-1])[::-1],dtype=np.int64)
     #print("sumshape=%s ; sumstrides=%s" % (str(sumshape),str(sumstrides)))
     #sys.stderr.write("iterationstrides=%s dtype=%s\n" % (str(iterationstrides),str(iterationstrides.dtype)))
     resultshape=np.array(shape,dtype=np.int64)
-    resultshape[axissumflag.astype(np.bool)]=1
+    resultshape[axissumflag.astype(bool)]=1
     resultstrides = np.array(np.cumprod(np.concatenate((resultshape,(1,)))[-1:0:-1])[::-1],dtype=np.int64)
     
     
@@ -1269,7 +1269,7 @@ def greensconvolution_integrate_anisotropic(greensconvolution_params,zvecinput,x
     
     if kernel=="openmp_interpolator":
 
-        resultactualshape=shape[~axissumflag.astype(np.bool)]
+        resultactualshape=shape[~axissumflag.astype(bool)]
         result=np.zeros(np.prod(resultactualshape),dtype='f')
 
         vrange=greensconvolution_params.vrange
@@ -1298,9 +1298,9 @@ def greensconvolution_integrate_anisotropic(greensconvolution_params,zvecinput,x
     
 
     
-        #print(axissumflag.astype(np.bool))
+        #print(axissumflag.astype(bool))
         #print(shape)
-        #print(shape[~axissumflag.astype(np.bool)])
+        #print(shape[~axissumflag.astype(bool)])
         result_c = <float *> np.PyArray_DATA(result) 
         
         #sys.stderr.write("strides=%s dtype=%s\n" % (str(strides),str(strides.dtype)))
@@ -1331,7 +1331,7 @@ def greensconvolution_integrate_anisotropic(greensconvolution_params,zvecinput,x
 
         # print(shape)
         # print(axissumflag)
-        resultactualshape=shape[~axissumflag.astype(np.bool)]
+        resultactualshape=shape[~axissumflag.astype(bool)]
         # print(resultactualshape)
         if greensconvolution_params.OpenCL_Version < 1.2:
             # Cannot use fill... copy zero buffer instead
@@ -1483,7 +1483,7 @@ def greensconvolution_integrate_anisotropic(greensconvolution_params,zvecinput,x
 
         resultref=returnparam(result)  # python (not cython) reference that we can access from closure
         shaperef=returnparam(shape)
-        PySummedShape=shape[(~axissumflag.astype(np.bool)) & (~PyAxisSumFlag.astype(np.bool))]
+        PySummedShape=shape[(~axissumflag.astype(bool)) & (~PyAxisSumFlag.astype(bool))]
 
         # Closure function is what we have to do to clean up. and get data
         def closure():
@@ -1533,7 +1533,7 @@ def greensconvolution_integrate_anisotropic(greensconvolution_params,zvecinput,x
     
         
     
-    PySummedShape=shape[(~axissumflag.astype(np.bool)) & (~PyAxisSumFlag.astype(np.bool))]
+    PySummedShape=shape[(~axissumflag.astype(bool)) & (~PyAxisSumFlag.astype(bool))]
 
     #print(PySumAxes)
     #print(resultshape)
